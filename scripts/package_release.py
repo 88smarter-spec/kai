@@ -8,7 +8,7 @@ root = Path(__file__).resolve().parent.parent
 output = root.parent / "artifacts"
 output.mkdir(exist_ok=True)
 archive_path = output / "kai-windows-offline.zip"
-files = [root / "README.md", root / ".gitignore"]
+files = [root / "README.md", root / ".gitignore", *root.glob("*.bat")]
 for directory in ["backend", "frontend", "scripts", "samples", "docs", "wheelhouse"]:
     for path in (root / directory).rglob("*"):
         if not path.is_file():

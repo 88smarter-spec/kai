@@ -15,6 +15,10 @@ if not exist ".venv\Scripts\python.exe" py -3.12 -m venv .venv
 if errorlevel 1 goto fail
 ".venv\Scripts\python.exe" -m pip install --no-index --find-links wheelhouse --require-hashes -r backend\requirements.offline.txt
 if errorlevel 1 goto fail
+if exist "local-ai\ai-ready.json" (
+  ".venv\Scripts\python.exe" scripts\install_vc_runtime.py
+  if errorlevel 1 goto fail
+)
 echo 오프라인 설치 완료. start_all.bat를 실행하세요. 배포 모드에서는 Node.js가 필요하지 않습니다.
 pause
 exit /b 0

@@ -54,3 +54,13 @@ pytest에는 Starlette TestClient와 최신 AnyIO 간 deprecated alias 경고 1�
 3. llama.cpp CUDA 배포와 Qwen GGUF 경로 설정 → start_llm_example.bat.
 4. LLM 설정 연결 확인 → 자연어 질문 → JSON 계획 확인 → 계산 결과/한국어 해석 확인.
 5. GPU 메모리/지연 시간에 맞춰 GPU offload와 context 조정. 보고서 숫자를 Python 근거와 대조.
+
+## AI 일괄 준비 도구 검증
+
+- 준비/런처 테스트 7개 + 기존 Backend 테스트 26개: 33 passed.
+- 다운로드 이어받기, 서버가 Range를 무시하는 경우, SHA-256 불일치 차단, 기존 검증 파일 재사용, 모델 조각 누락 차단, ZIP 경로 탈출 차단, 모델 포함 ZIP 및 CUDA/CPU 실행 명령을 검증했습니다.
+- 고정 버전 llama.cpp b11429의 공식 Windows CPU ZIP(19,398,918 bytes)을 실제 다운로드하여 게시된 SHA-256과 일치함을 확인하고 llama-server.exe 압축 해제를 확인했습니다. CUDA 파일 해시는 공식 GitHub release 자산 정보에서 확인했습니다.
+- 클라우드 네트워크 정책으로 Hugging Face 모델 메타데이터 접근이 HTTP 403이어서 실제 Qwen 모델 다운로드/로딩은 검증하지 못했습니다. 모델 메타데이터 선택은 테스트 fixture로 검증했습니다. 실제 Windows 배치 실행 및 CUDA/CPU 추론은 미검증입니다.
+- 기본 배포 ZIP에는 AI 다운로드 준비 도구만 포함합니다. 모델 포함 ZIP은 인터넷 연결 Windows PC에서 준비 도구를 실행하면 생성됩니다. Python 3.12 설치 파일은 별도 필요합니다.
+
+- Microsoft 런타임은 공식 HTTPS에서 받은 파일의 유효한 Microsoft Authenticode 서명 검증을 필수로 합니다. 서명 실패 시 배포 파일로 확정하지 않는 fixture 테스트와 압축 해제 중단 후 재시도 테스트가 통과했습니다. 실제 Microsoft 다운로드/Windows 서명 및 UAC 설치는 미검증입니다.

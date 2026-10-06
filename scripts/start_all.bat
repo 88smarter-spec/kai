@@ -6,6 +6,7 @@ if not exist ".venv\Scripts\python.exe" (
   pause
   exit /b 1
 )
+if exist "local-ai\ai-ready.json" start "Local Qwen AI" "%ComSpec%" /k call "%~dp0start_llm.bat"
 if exist "frontend\dist\index.html" (
   start "Excel Data Backend" "%ComSpec%" /k call "%~dp0start_backend.bat"
   ".venv\Scripts\python.exe" scripts\wait_ready.py http://127.0.0.1:8000/api/health http://127.0.0.1:8000

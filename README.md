@@ -6,6 +6,17 @@ Windows 10/11 망분리 PC에서 실행하는 로컬 분석 웹앱입니다. Exc
 
 Python이 숫자를 계산하고 로컬 Qwen이 결과를 해석합니다. 인터넷 API, CDN, 외부 폰트, 원격 저장, 사용량 수집을 사용하지 않습니다. 실행 시 서버는 `127.0.0.1`에만 바인딩합니다.
 
+## AI까지 한 번에 준비하기
+
+모델은 **Qwen3-14B Q4_K_M 하나**입니다. llama.cpp는 모델을 실행하는 프로그램입니다. 모델이 여러 조각으로 제공되어도 준비 도구가 모두 받아 하나의 모델로 사용합니다.
+
+1. 인터넷 연결 Windows PC에 Python 3.12 x64를 설치하고 위 ZIP을 압축 해제합니다.
+2. 폴더 안의 **`AI포함_묶음만들기.bat`**를 더블클릭합니다. 공식 Qwen 모델과 고정 버전 llama.cpp CUDA/CPU 실행 파일을 자동 다운로드하고 SHA-256을 검증합니다. Microsoft VC++ x64 런타임도 받아 Microsoft 전자서명을 검증해 포함합니다. 여유 공간 25GB 이상이 필요합니다.
+3. 압축 해제 폴더 옆에 생성되는 **`ExcelAnalysis-with-AI.zip`** 하나를 망분리 PC로 옮깁니다. 다운로드가 중단되면 같은 준비 파일을 다시 실행합니다.
+4. 대상 PC에도 Python 3.12 x64가 설치되어 있어야 합니다. 완성 ZIP을 풀고 `scripts\install_offline.bat` → `scripts\start_all.bat`를 실행합니다. 설치 중 Microsoft 런타임 설치를 위한 Windows 관리자 확인(UAC)이 표시될 수 있습니다. AI 준비 기록이 있으면 Qwen 서버도 자동 실행합니다.
+
+첫 준비만 인터넷이 필요합니다. 공개 93MB ZIP에는 모델 자체가 없고 자동 준비 도구가 들어 있습니다. Python 설치 파일도 별도 준비해야 합니다. CPU만 준비하려면 `py -3.12 scripts\prepare_ai_bundle.py --zip --cpu-only`를 사용하세요. 기본값은 GPU 20개 layer와 context 8192이며 GPU 실행 실패 시 CPU로 재시도합니다. AI 창에서 모델 로딩이 끝난 뒤 앱의 LLM 연결 확인을 누르세요.
+
 ## 가장 쉬운 실행 — Windows 오프라인 배포
 
 제공된 `kai-windows-offline.zip`에는 앱 소스, 빌드된 화면, **Windows x64 / Python 3.12용 wheelhouse**가 들어 있습니다. 별도 Python 설치 파일과 LLM 파일은 포함하지 않습니다.
@@ -14,7 +25,7 @@ Python이 숫자를 계산하고 로컬 Qwen이 결과를 해석합니다. 인�
 2. ZIP을 `C:\ExcelAnalysis`처럼 쓰기 가능한 폴더에 압축 해제합니다.
 3. `scripts\install_offline.bat`를 더블클릭합니다. 네트워크 없이 wheelhouse에서 해시를 검증하며 패키지를 설치합니다.
 4. `scripts\start_all.bat`를 더블클릭합니다. Backend 창이 열리고 준비되면 기본 브라우저가 `http://127.0.0.1:8000`을 엽니다. 기본 브라우저를 Chrome으로 지정하면 Chrome으로 열립니다.
-5. **데이터 추가 → Excel 붙여넣기**로 시작합니다. AI를 사용하려면 아래의 llama.cpp 서버도 별도 실행합니다.
+5. **데이터 추가 → Excel 붙여넣기**로 시작합니다. AI 포함 묶음은 서버가 자동 실행됩니다. 기본 ZIP만 사용한다면 아래 llama.cpp 수동 준비를 진행합니다.
 
 빌드된 배포 모드는 **Node.js가 필요하지 않습니다**. Backend 콘솔 창을 닫으면 서버가 종료되고 메모리 데이터도 사라집니다. 데이터/채팅은 앱 재시작 시 복구되지 않습니다. 원본 업무 데이터를 자동 저장하지 않습니다.
 
